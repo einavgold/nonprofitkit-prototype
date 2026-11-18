@@ -765,7 +765,7 @@ V.charity=()=>{
 V.agent=()=>{
  const st=esc(stName());
  return {ok:val('agent')!==undefined,html:`${qicon('mail')}
- <h1>Who should receive your official mail?</h1>
+ <h1>Choose your registered agent</h1>
  <p class="body">Every nonprofit needs a registered agent: a street address in ${st} where legal and state documents are delivered.</p>
  ${pills('agent','Use NonprofitKit as my registered agent · $99/year<small>Same price every year.</small>',`I'll be my own agent<small>You'll need a ${st} street address that's open during business hours. It becomes public record.</small>`)}
  ${wyg([['lock','Keep your home address private','Our address goes on public state records, not yours.'],
