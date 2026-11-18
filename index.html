@@ -554,7 +554,7 @@ function recPlan(){ return S.revenue==='gt50'?'complete':S.revenue==='5to50'?'es
 function defaults(k){
  switch(k){
   case 'donation': return S.revenue&&S.revenue!=='lt5'?true:undefined;
-  case 'charity': return charityMode()==='required'?true:undefined;
+  case 'charity': return charityMode()==='required'; // optional tier (GA $5k–$50k): second option preselected
   case 'permits': return (S.cause==='kids'||S.cause==='animals');
   case 'bookkeeping': return S.revenue==='gt50'?true:undefined;
   case 'plan': return recPlan();
@@ -758,6 +758,7 @@ V.charity=()=>{
  <h1>Your state requires registration before you ask for donations</h1>
  <p class="body">Charities above a certain size must register with the state before they fundraise. We prepare and file it for you.</p>
  ${pills('charity',`File it for me · $99 + $${fee} state fee`,"I'll file it myself")}
+ ${charityMode()==='optional'?`<p class="note">${ic('info')}<span>Required in Georgia once you raise more than $25,000 a year.</span></p>`:''}
  ${wyg([['shieldcheck','Ask for donations legally','Registered before you fundraise.'],
      ['file','We file it for you','Forms, fees and confirmation.'],
      ['bell','Renewals on track','We remind you before it expires.']])}`};
