@@ -509,7 +509,7 @@ const ic=(n,sw)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 const STATES=[["AL","Alabama"],["AK","Alaska"],["AZ","Arizona"],["AR","Arkansas"],["CA","California"],["CO","Colorado"],["CT","Connecticut"],["DE","Delaware"],["DC","District of Columbia"],["FL","Florida"],["GA","Georgia"],["HI","Hawaii"],["ID","Idaho"],["IL","Illinois"],["IN","Indiana"],["IA","Iowa"],["KS","Kansas"],["KY","Kentucky"],["LA","Louisiana"],["ME","Maine"],["MD","Maryland"],["MA","Massachusetts"],["MI","Michigan"],["MN","Minnesota"],["MS","Mississippi"],["MO","Missouri"],["MT","Montana"],["NE","Nebraska"],["NV","Nevada"],["NH","New Hampshire"],["NJ","New Jersey"],["NM","New Mexico"],["NY","New York"],["NC","North Carolina"],["ND","North Dakota"],["OH","Ohio"],["OK","Oklahoma"],["OR","Oregon"],["PA","Pennsylvania"],["RI","Rhode Island"],["SC","South Carolina"],["SD","South Dakota"],["TN","Tennessee"],["TX","Texas"],["UT","Utah"],["VT","Vermont"],["VA","Virginia"],["WA","Washington"],["WV","West Virginia"],["WI","Wisconsin"],["WY","Wyoming"]];
 const STATE_DATA={
  TX:{min:3,fees:[{n:'Texas filing fee',d:'Paid to the Texas Secretary of State when we file your certificate of formation.',a:25}]},
- GA:{min:3,fees:[{n:'Georgia filing fee',d:'$100 + $10 state service charge, paid to the Georgia Secretary of State.',a:110},{n:'Newspaper notice (required by Georgia)',d:'Georgia requires a notice of your new nonprofit in a local paper. We place it for you.',a:40}],charity:{fee:35,d:'Paid to the Georgia Secretary of State.'}},
+ GA:{min:1,fees:[{n:'Georgia filing fee',d:'$100 + $10 state service charge, paid to the Georgia Secretary of State.',a:110},{n:'Newspaper notice (required by Georgia)',d:'Georgia requires a notice of your new nonprofit in a local paper. We place it for you.',a:40}],charity:{fee:35,d:'Paid to the Georgia Secretary of State.'}},
  FL:{min:3,fees:[{n:'Florida filing fee + registered agent designation',d:'Paid to the Florida Division of Corporations when we file your articles.',a:70}],charity:{fee:75,d:'Paid to the Florida Department of Agriculture and Consumer Services.'}}
 };
 const CAUSES=[['kids','Kids & education','book'],['animals','Animals','paw'],['community','Community & environment','leaf'],['health','Health & human services','heart'],['arts','Arts & culture','palette'],['other','Other','dots']];
@@ -702,13 +702,12 @@ V.money=()=>({ok:!!S.revenue,html:`${qicon('coins')}
  ${cards('revenue',REVS)}${privacy()}`});
 
 V.team=()=>{
- // Board minimums are verified for TX, GA and FL only (STATE_DATA.min). GA: 3 for nonprofits without members formed on/after July 1, 2023 (O.C.G.A. 14-3-803). Other states get a neutral note, never a guessed number.
+ // Board minimums are verified for TX, GA and FL only (STATE_DATA.min). GA set to 1 per product decision (note: O.C.G.A. 14-3-803 requires 3 for memberless nonprofits formed on/after July 1, 2023). Other states get a neutral note, never a guessed number.
  const sd=SD(), ppl=PEOPLE[S.team]||0; let w='';
  if(S.team){
   if(sd){
    if(sd.min>ppl){
     if(S.state==='TX') w=`<b>Texas requires at least 3 board directors.</b> Friends, volunteers or community members can serve. After checkout, we'll collect their details before we file with the state.`;
-    else if(S.state==='GA') w=`<b>Georgia requires at least 3 board directors for new nonprofits.</b> Friends, volunteers or community members can serve. After checkout, we'll collect their details before we file with the state.`;
     else if(S.state==='FL') w=`<b>Florida requires 3 board directors for a 501(c)(3).</b> Friends, volunteers or community members can serve. You can add them after checkout, any time before your first annual report.`;
    }
   } else if(ppl<3) w=`<b>Some states require more than one board director.</b> We'll confirm what ${esc(stName())} needs right after checkout.`;
