@@ -305,6 +305,9 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 .pc-list li{display:flex;gap:10px;align-items:flex-start}
 .pc-list li>svg{width:18px;height:18px;color:var(--success);flex:none;margin-top:2px}
 .pc-list li>span{flex:1;min-width:0}
+.pc-help{display:block;font-size:13px;color:var(--muted);margin-top:2px;line-height:1.35}
+.pc-list li.neutral{color:var(--muted)}
+.pc-list li.neutral>svg{color:var(--muted)}
 .tip{position:relative;border:0;background:none;padding:0;width:22px;height:22px;display:grid;place-items:center;color:var(--muted);flex:none;border-radius:50%}
 .tip svg{width:15px;height:15px}
 .tip:hover,.tip:focus{color:var(--primary)}
@@ -518,8 +521,6 @@ const PAIDS=[['volunteers','Volunteers only','heart'],['pay','I may pay myself o
 const PLANS={free:{name:'Free',price:0,mo:0},essentials:{name:'Essentials',price:99,mo:8},complete:{name:'Complete',price:449,mo:37}};
 const PLAN_DESC={essentials:'Registered agent, state annual report filed for you, deadline alerts',complete:'Everything in Essentials, plus your yearly IRS return and charity registration renewals'};
 const MATRIX=[['Deadline alerts (state + IRS)',1,1,1],['Support',1,1,1],['Registered agent (your address stays off public records)',0,1,1],['State annual report filed for you',0,1,1],['Yearly IRS return (990-EZ / 990) prepared and filed',0,0,1],['Charity registration renewals',0,0,1]];
-// Demo founders. AGENT_CHOICE: true = NonprofitKit is the registered agent, false = their own agent.
-const AGENT_CHOICE={maria:true,james:true,leah:false};
 const PERSONAS={
  maria:{state:'TX',name:'Code Club Austin',cause:'kids',revenue:'5to50',team:'three',paid:'volunteers',first:'Maria',last:'Lopez',phone:'(512) 555-0142',email:'maria@example.com',pw:'demo-password'},
  james:{state:'GA',name:'Second Chance Rescue',cause:'animals',revenue:'gt50',team:'two',paid:'unsure',first:'James',last:'Carter',phone:'(404) 555-0187',email:'james@example.com',pw:'demo-password'},
@@ -528,7 +529,7 @@ const PERSONAS={
 const SECTIONS={1:'About your nonprofit',2:'Your plan',3:'IRS approval',4:'Review & pay'};
 const SCREENS=[
  {id:'landing',sec:0},{id:'basics',sec:1},{id:'cause',sec:1},{id:'money',sec:1},{id:'team',sec:1},{id:'save',sec:1},
- {id:'donation',sec:2},{id:'charity',sec:2},{id:'agent',sec:2},{id:'bookkeeping',sec:2},{id:'plan',sec:2},{id:'c3',sec:3},
+ {id:'donation',sec:2},{id:'charity',sec:2},{id:'permits',sec:2},{id:'bookkeeping',sec:2},{id:'plan',sec:2},{id:'c3',sec:3},
  {id:'review',sec:4},{id:'success',sec:5}
 ];
 
@@ -554,7 +555,7 @@ function defaults(k){
  switch(k){
   case 'donation': return S.revenue&&S.revenue!=='lt5'?true:undefined;
   case 'charity': return charityMode()==='required'?true:undefined;
-  case 'agent': return undefined;
+  case 'permits': return (S.cause==='kids'||S.cause==='animals');
   case 'bookkeeping': return S.revenue==='gt50'?true:undefined;
   case 'plan': return recPlan();
   case 'q1': return S.revenue==='gt50';
@@ -579,11 +580,11 @@ function calc(){
  one.push({n:(S.state==='FL'&&!cm)?'Nonprofit Basics (incl. Florida charity exemption filing)':'Nonprofit Basics',a:99,on:true,fixed:true,when:'today'});
  if(off==='C'&&!apply) one.push({n:'501(c)(3)',note:'Not needed yet · you save $424',a:0,on:true});
  else if(apply||S.listed.has('c3')) one.push({n:off==='B'?'501(c)(3) application (full form)':'501(c)(3) application (short form)',a:off==='B'?449:149,on:apply,key:'c3',when:'today'});
+ if(val('permits')===true||S.listed.has('permits')) one.push({n:'Permits report',a:39,on:val('permits')===true,key:'permits',when:'today'});
  if(cm&&(val('charity')===true||S.listed.has('charity'))) one.push({n:'Charity registration',a:99,on:val('charity')===true,key:'charity',when:'today'});
  one.push({n:'Expedited state filing',a:39,on:val('expedited')===true,key:'expedited',when:'today'});
  one.push({n:"Founder's kit",a:69,on:val('kit')===true,key:'kit',when:'today'});
  if(val('donation')===true||S.listed.has('donation')) yearly.push({n:'Donation page',a:59,txt:'$59/year',on:val('donation')===true,key:'donation',when:'today'});
- if(val('agent')===true||S.listed.has('agent')) yearly.push({n:'Registered agent',a:99,txt:'$99/yr',on:val('agent')===true,key:'agent',when:'today'});
  const bk=val('bookkeeping')===true;
  if(bk||S.listed.has('bookkeeping')) monthly.push({n:'Bookkeeping',a:39,txt:'$39/month',on:bk,key:'bookkeeping',when:'when we file'});
  if(sd) sd.fees.forEach(f=>fees.push(f));
@@ -595,7 +596,7 @@ function calc(){
  const today=servicesTotal+feesTotal;
  const irs=apply?(off==='B'?600:275):0;
  const stateLater=S.state==='GA'?{when:'Within 90 days',n:'Georgia annual registration',a:40}:S.state==='FL'?{when:'By May 1',n:'Florida annual report',a:61.25}:null;
- const renewal=planPrice+(val('donation')===true?59:0)+(val('agent')===true?99:0);
+ const renewal=planPrice+(val('donation')===true?59:0);
  const firstYear=today+irs+(stateLater?stateLater.a:0)+(bk?468:0);
  return {plan,one,yearly,monthly,fees,servicesTotal,feesTotal,today,irs,stateLater,bk,renewal,firstYear,unknownFee:!sd};
 }
@@ -763,16 +764,15 @@ V.charity=()=>{
      ['bell','Renewals on track','We remind you before it expires.']])}`};
 };
 
-// Registered agent: true = NonprofitKit is the agent ($99/year), false = founder is their own agent. Never preselected.
-V.agent=()=>{
- const st=esc(stName());
- return {ok:val('agent')!==undefined,html:`${qicon('mail')}
- <h1>Choose your registered agent</h1>
- <p class="body">Every nonprofit needs a registered agent: a street address in ${st} where legal and state documents are delivered.</p>
- ${pills('agent','Use NonprofitKit as my registered agent · $99/year<small>Same price every year.</small>',`I'll be my own agent<small>You'll need a ${st} street address that's open during business hours. It becomes public record.</small>`)}
- ${wyg([['lock','Keep your home address private','Our address goes on public state records, not yours.'],
-     ['mail','Never miss a legal notice','We scan official mail to your account and email you when it arrives.'],
-     ['shieldcheck','Stay in good standing',"We keep your agent on file with the state, so there's nothing to update."]],'What it includes')}`};
+V.permits=()=>{
+ const rec=S.cause==='kids'||S.cause==='animals';
+ return {ok:val('permits')!==undefined,html:`${qicon('clipboard')}
+ <h1>Find out which permits your nonprofit needs</h1>
+ <p class="body">Depending on what you do and where, you may need local licenses or permits. We check your city, county and state rules and send you a clear list.</p>
+ ${pills('permits','Get my permits report · $39','No thanks',rec?'Recommended':'')}
+ ${wyg([['listcheck','Know exactly what applies','City, county and state rules, in one list.'],
+     ['building','Ready for venues and partners','The proof they ask for before you start.'],
+     ['shieldcheck','Start without surprises','Know what you need before your first program or event.']])}`};
 };
 
 V.bookkeeping=()=>{
@@ -787,11 +787,15 @@ V.bookkeeping=()=>{
      ['calendar','Monthly, no lock-in','Cancel anytime.']],rec?'What you get':'What it includes')}`};
 };
 
+// Plan card lines: [text, tooltip, visible helper, neutral (not a benefit)]
+const AGENT_LINE=['Registered agent included','We act as your registered agent, so our address goes on state records instead of yours.','Our address on public records, not your home address.'];
 const PLAN_ITEMS={
  free:[['Alerts you before every state and IRS deadline','Email reminders before each state report and IRS filing is due.'],
   ['You file yourself: we send the link and the steps','We send the official form link and a short how-to for each filing.'],
-  ['Support from our team','Questions answered by chat or email.']],
+  ['Support from our team','Questions answered by chat or email.'],
+  ['You act as your own registered agent','Your own address goes on state records, and official mail comes to you.','',true]],
  complete:[['Everything in Essentials','Registered agent, state reports filed for you and deadline alerts.'],
+  AGENT_LINE,
   ['Prepares and files your IRS return (990-EZ)','Required every year once you raise over $50,000. We prepare it and file it.'],
   ['Renews your charity registration','We renew your state charity registration before it expires.']]
 };
@@ -800,7 +804,7 @@ const PLAN_WHY={free:'Small groups like yours file a free IRS postcard. Deadline
  complete:'Groups raising over $50,000 file a real IRS return every year. We prepare and file it for you.'};
 function planList(p){
  if(PLAN_ITEMS[p]) return PLAN_ITEMS[p];
- const agent=['Keeps your home address off public records','We act as your registered agent, so our address goes on state records instead of yours.'];
+ const agent=AGENT_LINE;
  const postcard=['Reminds you to file your free IRS postcard (990-N)','Small nonprofits file the 990-N online every year. It is free and takes about 10 minutes.'];
  if(S.state==='TX') return [agent,postcard,['Files your state report when Texas asks','Texas can ask for a short report up to every 4 years. We file it. The $5 state fee is at cost.']];
  if(S.state==='FL') return [agent,['Files your Florida annual report by May 1','Due every year. We file it. The $61.25 state fee is at cost.'],postcard];
@@ -824,7 +828,7 @@ V.plan=()=>{
  <div class="pcard">
   ${cur===rec?'<span class="chip">Recommended for you</span>':''}
   <div class="pc-name">${PLANS[cur].name}</div>${priceHTML(cur)}
-  <ul class="pc-list">${planList(cur).map(([t,tip])=>`<li>${ic('check',2.5)}<span>${t}</span><button type="button" class="tip" aria-label="${esc(tip)}" data-tip="${esc(tip)}">${ic('info')}</button></li>`).join('')}</ul>
+  <ul class="pc-list">${planList(cur).map(([t,tip,h,neutral])=>`<li class="${neutral?'neutral':''}">${neutral?ic('user'):ic('check',2.5)}<span>${t}${h?`<small class="pc-help">${h}</small>`:''}</span><button type="button" class="tip" aria-label="${esc(tip)}" data-tip="${esc(tip)}">${ic('info')}</button></li>`).join('')}</ul>
   <div class="pc-why"><b>Why this plan?</b>${PLAN_WHY[cur]}</div>
  </div>
  ${cur==='free'?`<p class="note">${ic('info')}<span>Using your home address? Essentials keeps it off public records · $99/year</span></p>`:''}
@@ -932,7 +936,7 @@ function ovHTML(){
   const cards=['free','essentials','complete'].map(p=>`<div class="cmp ${p===rec?'rec':''}">
     ${p===rec?'<span class="chip">Recommended for you</span>':''}
     <div class="pc-name">${PLANS[p].name}</div>${priceHTML(p)}
-    <ul class="pc-list">${planList(p).map(([t])=>`<li>${ic('check',2.5)}<span>${t}</span></li>`).join('')}</ul>
+    <ul class="pc-list">${planList(p).map(([t,,h,neutral])=>`<li class="${neutral?'neutral':''}">${neutral?ic('user'):ic('check',2.5)}<span>${t}${h?`<small class="pc-help">${h}</small>`:''}</span></li>`).join('')}</ul>
     <button class="${p===cur?'primary':'outline'} block" data-act="pickplan" data-val="${p}">${p===cur?'Selected':'Choose '+PLANS[p].name}</button>
    </div>`).join('');
   return `<div class="modal ${mob?'':'xwide'}" role="dialog" aria-modal="true" aria-labelledby="ovt"><button class="xbtn" data-act="close" aria-label="Close">${ic('x')}</button>
@@ -1006,7 +1010,7 @@ function render(){
 
 function go(id){S.screen=id;S.ov=null;render();}
 function enterReview(){
- ['c3','donation','charity','agent','bookkeeping'].forEach(k=>{
+ ['c3','donation','charity','permits','bookkeeping'].forEach(k=>{
   const on=k==='c3'?c3Apply():val(k)===true; if(on) S.listed.add(k);
  });
  const p=val('plan'); if(p!=='free') S.listedPlan=p;
@@ -1019,8 +1023,7 @@ function back(){const f=flow(), i=f.indexOf(S.screen); if(i>0) go(f[i-1]);}
 
 function fillPersona(key){
  const p=PERSONAS[key]; Object.assign(S,p); S.google=false; S.sel={}; S.listed=new Set(); S.listedPlan=null;
- ['donation','charity','agent','bookkeeping'].forEach(k=>{ if(defaults(k)===undefined) S.sel[k]=false; });
- S.sel.agent=AGENT_CHOICE[key];
+ ['donation','charity','permits','bookkeeping'].forEach(k=>{ if(defaults(k)===undefined) S.sel[k]=false; });
  ['q2','q3','q4'].forEach(k=>{ S.sel[k]=false; });
  if(!flow().includes(S.screen)){ // e.g. on the charity screen for a founder who skips it
   const all=SCREENS.map(s=>s.id), f=flow(); let i=all.indexOf(S.screen);
