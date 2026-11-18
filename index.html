@@ -518,6 +518,8 @@ const PAIDS=[['volunteers','Volunteers only','heart'],['pay','I may pay myself o
 const PLANS={free:{name:'Free',price:0,mo:0},essentials:{name:'Essentials',price:99,mo:8},complete:{name:'Complete',price:449,mo:37}};
 const PLAN_DESC={essentials:'Registered agent, state annual report filed for you, deadline alerts',complete:'Everything in Essentials, plus your yearly IRS return and charity registration renewals'};
 const MATRIX=[['Deadline alerts (state + IRS)',1,1,1],['Support',1,1,1],['Registered agent (your address stays off public records)',0,1,1],['State annual report filed for you',0,1,1],['Yearly IRS return (990-EZ / 990) prepared and filed',0,0,1],['Charity registration renewals',0,0,1]];
+// Demo founders. AGENT_CHOICE: true = NonprofitKit is the registered agent, false = their own agent.
+const AGENT_CHOICE={maria:true,james:true,leah:false};
 const PERSONAS={
  maria:{state:'TX',name:'Code Club Austin',cause:'kids',revenue:'5to50',team:'three',paid:'volunteers',first:'Maria',last:'Lopez',phone:'(512) 555-0142',email:'maria@example.com',pw:'demo-password'},
  james:{state:'GA',name:'Second Chance Rescue',cause:'animals',revenue:'gt50',team:'two',paid:'unsure',first:'James',last:'Carter',phone:'(404) 555-0187',email:'james@example.com',pw:'demo-password'},
@@ -1018,6 +1020,7 @@ function back(){const f=flow(), i=f.indexOf(S.screen); if(i>0) go(f[i-1]);}
 function fillPersona(key){
  const p=PERSONAS[key]; Object.assign(S,p); S.google=false; S.sel={}; S.listed=new Set(); S.listedPlan=null;
  ['donation','charity','agent','bookkeeping'].forEach(k=>{ if(defaults(k)===undefined) S.sel[k]=false; });
+ S.sel.agent=AGENT_CHOICE[key];
  ['q2','q3','q4'].forEach(k=>{ S.sel[k]=false; });
  if(!flow().includes(S.screen)){ // e.g. on the charity screen for a founder who skips it
   const all=SCREENS.map(s=>s.id), f=flow(); let i=all.indexOf(S.screen);
