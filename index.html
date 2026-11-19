@@ -337,6 +337,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 .rc-h+.rline{border-top:0}
 .rline.nt{grid-template-columns:minmax(0,1fr) 46px}
 .rl-n{font-weight:500;font-size:15px}
+.tl-sub{margin:4px 0 0;font-size:13px;line-height:1.4;color:var(--muted)}
 .rl-sub{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
 .rl-note{display:block;font-size:13px;font-weight:500;color:var(--success)}
 .rl-r{display:flex;flex-direction:column;align-items:flex-end;font-variant-numeric:tabular-nums}
@@ -916,7 +917,7 @@ V.review=()=>{
   ${c.irs?`<div class="tl-g"><div class="tl-h">When we file your 501(c)(3)</div><div class="tl-r"><span>IRS fee</span><span>${fmt(c.irs)}</span></div></div>`:''}
   ${c.stateLater?`<div class="tl-g"><div class="tl-h">${c.stateLater.when}</div><div class="tl-r"><span>${c.stateLater.n}</span><span>${fmt(c.stateLater.a)}</span></div></div>`:''}
   ${c.bk?'<div class="tl-g"><div class="tl-h">Monthly</div><div class="tl-r"><span>Bookkeeping, starts after formation</span><span>$39/month</span></div></div>':''}
-  ${c.renewal?`<div class="tl-g"><div class="tl-h">In 12 months</div><div class="tl-r"><span>Renewals</span><span>${fmt(c.renewal)}/year</span></div></div>`:''}
+  ${c.renewal?`<div class="tl-g"><div class="tl-h">In 12 months</div><div class="tl-r"><span>Renewals</span><span>${fmt(c.renewal)}/year</span></div><p class="tl-sub">Plus applicable state fees, charged at cost.</p></div>`:''}
   <div class="tl-r tot"><span>First-year total</span><span>${fmt(c.firstYear)}</span></div></section>`;
  const payBtn=`<button class="primary block" data-act="ov" data-ov="pay">Continue to payment · ${fmt(c.today)}</button><p class="under">${PAY_UNDER}</p>`;
  const left=`<div class="planrow"><span class="pr-n">${P0.name} · ${c.plan==='free'?'$0':'$'+P0.price+'/year'}</span><button class="linkbtn" data-act="ov" data-ov="plans">Change plan</button></div>
