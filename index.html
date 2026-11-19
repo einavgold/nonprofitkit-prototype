@@ -289,7 +289,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 .outline{background:var(--surface);color:var(--primary);border:1.5px solid var(--primary);border-radius:999px;height:50px;padding:0 24px;font-weight:600;font-size:16px}
 .outline:hover{background:var(--tint)}
 .outline.block{width:100%}
-.cmpbtn{margin-top:16px}
+.cmplink{text-align:center;margin:16px 0 0}
+.cmplink .linkbtn{color:var(--primary-hover);font-weight:400;font-size:15px}
 .ans{display:flex;flex-direction:column;align-items:center;gap:8px;margin:2px 0 24px}
 .ans-l{font-size:13px;font-weight:500;color:var(--muted)}
 .ans-chips{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px}
@@ -833,7 +834,7 @@ V.plan=()=>{
   <div class="pc-why"><b>Why this plan?</b>${PLAN_WHY[cur]}</div>
  </div>
  ${cur==='free'?`<p class="note">${ic('info')}<span>Using your home address? Essentials keeps it off public records · $99/year</span></p>`:''}
- <button class="outline block cmpbtn" data-act="ov" data-ov="plans">Compare plans</button>`};
+ <p class="cmplink"><button class="linkbtn" data-act="ov" data-ov="plans">See other options</button></p>`};
 };
 
 function offerHTML(){
