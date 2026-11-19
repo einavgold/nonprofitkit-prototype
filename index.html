@@ -297,6 +297,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 .achip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:500}
 .achip svg{width:14px;height:14px;color:var(--primary);flex:none}
 .ans-edit{font-size:13px;cursor:default}
+.edit-top{display:none}
+.edit-top .ans-edit{padding:0 2px;font-weight:600}
 .ans.sm{margin:0 0 20px}
 .ans.sm .achip{font-size:12px;padding:3px 9px;gap:5px}
 .ans.sm .achip svg{width:12px;height:12px}
@@ -418,6 +420,11 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
   .sect .sdot{display:none}
   .sect b{font-size:13px;overflow:hidden;text-overflow:ellipsis;max-width:100%}
   .chat span{display:none}
+  .ans:not(.sm) .ans-chips{width:100%;gap:5px}
+  .ans:not(.sm) .achip{flex:1 1 auto;justify-content:center;font-size:12px;padding:5px 7px;gap:4px}
+  .ans:not(.sm) .achip svg{width:12px;height:12px}
+  .ans:not(.sm) .edit-row{display:none}
+  .ans:not(.sm) .edit-top{display:inline}
   .logo{font-size:18px}
   .page{padding-top:20px}
   .cards{grid-template-columns:1fr;gap:10px}
@@ -823,7 +830,7 @@ function priceHTML(p){
 function answerChips(small){
  const c=CAUSES.find(x=>x[0]===S.cause)||[], r=REVS.find(x=>x[0]===S.revenue)||[], t=TEAMS.find(x=>x[0]===S.team)||[];
  const items=[[esc(stName()),'pin'],[c[1],c[2]],[r[1],r[2]],[t[1],t[2]]].filter(x=>x[0]);
- return `<div class="ans ${small?'sm':''}">${small?'':'<div class="ans-l">Based on your answers</div>'}<div class="ans-chips">${items.map(([l,i])=>`<span class="achip">${ic(i)}${l}</span>`).join('')}<button class="linkbtn ans-edit" data-act="editans">${small?'Edit':'Edit my answers'}</button></div></div>`;
+ return `<div class="ans ${small?'sm':''}">${small?'':'<div class="ans-l">Based on your answers<span class="edit-top"> · <button class="linkbtn ans-edit" data-act="editans">Edit</button></span></div>'}<div class="ans-chips">${items.map(([l,i])=>`<span class="achip">${ic(i)}${l}</span>`).join('')}<button class="linkbtn ans-edit edit-row" data-act="editans">Edit</button></div></div>`;
 }
 V.plan=()=>{
  const rec=recPlan(), cur=val('plan');
