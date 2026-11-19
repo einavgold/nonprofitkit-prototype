@@ -574,10 +574,10 @@ function charityMode(){
 function recPlan(){ return S.revenue==='gt50'?'complete':S.revenue==='5to50'?'essentials':'free'; }
 function defaults(k){
  switch(k){
-  case 'donation': return S.revenue&&S.revenue!=='lt5'?true:undefined;
+  case 'donation': return undefined;
   case 'charity': return charityMode()==='required'; // optional tier (GA $5k–$50k): second option preselected
-  case 'permits': return (S.cause==='kids'||S.cause==='animals');
-  case 'bookkeeping': return S.revenue==='gt50'?true:undefined;
+  case 'permits': return undefined;
+  case 'bookkeeping': return undefined;
   case 'plan': return recPlan();
   case 'q1': return S.revenue==='gt50';
   case 'q2': case 'q3': case 'q4': return undefined;
@@ -654,13 +654,13 @@ V.landing=()=>({wide:true,html:`
  </section>
  <div class="trust">
   <div><span class="ci">${ic('tag')}</span>One clear price before you pay</div>
-  <div><span class="ci">${ic('bank')}</span>State and IRS fees at cost, never marked up</div>
+  <div><span class="ci">${ic('bank')}</span>Fees at cost, never marked up</div>
   <div><span class="ci">${ic('bell')}</span>Deadline alerts free, forever</div>
  </div>
  <section class="how">
   <p class="eyebrow">How it works</p>
   <div class="steps">
-   <div class="step"><div class="num">1</div><h3>Form your nonprofit</h3><p>We file with your state. You get a legal entity, a bank-ready EIN and bylaws.</p></div>   <div class="step"><div class="num">2</div><h3>Get IRS approval</h3><p>so donations become tax-deductible. (This is called 501(c)(3) status.)</p></div>   <div class="step"><div class="num">3</div><h3>Stay official</h3><p>We remind you of every deadline, or file them for you.</p></div>
+   <div class="step"><div class="num">1</div><h3>Form your nonprofit</h3><p>We file with your state. You get a legal entity, a bank-ready EIN and bylaws.</p></div>   <div class="step"><div class="num">2</div><h3>Get IRS approval</h3><p>We file your IRS application so donations become tax-deductible. (This is called 501(c)(3) status.)</p></div>   <div class="step"><div class="num">3</div><h3>Stay official</h3><p>We remind you of every deadline, or file them for you.</p></div>
   </div>
   <p class="punch">Most founders think step 1 is the finish line. Donors care about step 2.</p>
  </section>
@@ -767,7 +767,8 @@ V.donation=()=>{
  return {ok:val('donation')!==undefined,html:`${qicon('globe')}
  <h1>Give donors a proper way to give</h1>
  <p class="body">A simple website with a donation page and your own domain. Every gift goes straight to your nonprofit's account, with an automatic receipt.</p>
- ${pills('donation','Add a donation page · $59/year','No thanks',rec?'Recommended':'')}
+ ${pills('donation','Add a donation page · $59/year','No thanks',rec?'Recommended for you':'')}
+ ${rec?`<p class="note"><b>Recommended because</b> you expect to raise money from donors.</p>`:''}
  ${why("a page on your own .org shows donors you're the real thing, and receipts go out for you. Gifts sent to a personal account, such as Venmo, aren't tax-deductible.")}`};
 };
 function why(t){return `<p class="note why">${ic('info')}<span><b>Why it matters:</b> ${t}</span></p>`}
@@ -777,6 +778,7 @@ V.charity=()=>{
  return {ok:val('charity')!==undefined,html:`${qicon('bank')}
  <h1>Your state requires registration before you ask for donations</h1>
  <p class="body">Charities above a certain size must register with the state before they fundraise. We prepare and file it for you.</p>
+ <p class="note"><b>Required before you ask for donations in your state.</b></p>
  ${pills('charity',`File it for me · $99 + $${fee} state fee`,"I'll file it myself")}
  ${why(S.state==='GA'?'required in Georgia once you raise $25,000 or more a year, or work with a paid fundraiser. Registration is valid for 24 months.':'required in Florida once you raise more than $50,000 a year, or pay anyone to help you fundraise. Below that, we file your exemption for you as part of Basics.')}`};
 };
@@ -786,7 +788,8 @@ V.permits=()=>{
  return {ok:val('permits')!==undefined,html:`${qicon('clipboard')}
  <h1>Find out which permits your nonprofit needs</h1>
  <p class="body">Depending on what you do and where, you may need local licenses or permits. We check your city, county and state rules and send you a clear list.</p>
- ${pills('permits','Get my permits report · $39','No thanks',rec?'Recommended':'')}
+ ${pills('permits','Get my permits report · $39','No thanks',rec?'Recommended for you':'')}
+ ${rec?`<p class="note"><b>Recommended because</b> programs with ${S.cause==='kids'?'children':'animals'} often need local permits.</p>`:''}
  ${why("venues and partners often ask for permits before your first program or event. You'll know exactly what applies, in one list.")}`};
 };
 
@@ -795,7 +798,8 @@ V.bookkeeping=()=>{
  return {ok:val('bookkeeping')!==undefined,html:`${qicon('ledger')}
  <h1>Keep clean books for donors and the IRS</h1>
  <p class="body">We track donations, expenses and grants, and keep your books ready for your yearly IRS filing.</p>
- ${pills('bookkeeping','Add bookkeeping · $39/month','No thanks',rec?'Recommended':'')}
+ ${pills('bookkeeping','Add bookkeeping · $39/month','No thanks',rec?'Recommended for you':'')}
+ ${rec?`<p class="note"><b>Recommended because</b> you expect to raise over $50,000 a year.</p>`:''}
  ${why('funders want to see where the money went, and clean books make your yearly IRS filing simple. Under $50,000 a year, a separate bank account and a spreadsheet are usually enough.')}`};
 };
 
@@ -1037,7 +1041,8 @@ function back(){const f=flow(), i=f.indexOf(S.screen); if(i>0) go(f[i-1]);}
 
 function fillPersona(key){
  const p=PERSONAS[key]; Object.assign(S,p); S.google=false; S.sel={}; S.listed=new Set(); S.listedPlan=null;
- ['donation','charity','permits','bookkeeping'].forEach(k=>{ if(defaults(k)===undefined) S.sel[k]=false; });
+ const recAddon={donation:S.revenue!=='lt5',permits:S.cause==='kids'||S.cause==='animals',bookkeeping:S.revenue==='gt50'};
+ ['donation','charity','permits','bookkeeping'].forEach(k=>{ if(defaults(k)===undefined) S.sel[k]=!!recAddon[k]; });
  ['q2','q3','q4'].forEach(k=>{ S.sel[k]=false; });
  if(!flow().includes(S.screen)){ // e.g. on the charity screen for a founder who skips it
   const all=SCREENS.map(s=>s.id), f=flow(); let i=all.indexOf(S.screen);
