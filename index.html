@@ -101,6 +101,8 @@ h2.q2{font-family:var(--display);font-weight:500;font-size:24px;line-height:1.25
 .chip.soft{background:var(--accent-soft);color:var(--accent-ink)}
 .note{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.45;color:var(--muted);margin:14px 4px 0}
 .note svg{width:15px;height:15px;flex:none;margin-top:2px}
+.note.why b{font-weight:500;color:var(--text)}
+.note.why{margin-top:16px}
 .wyg{margin-top:32px}
 .wyg h3{font-family:var(--sans);font-size:14px;font-weight:500;text-align:left;margin:0 0 10px}
 .wyg-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -746,11 +748,9 @@ V.donation=()=>{
  <h1>Give donors a proper way to give</h1>
  <p class="body">A simple website with a donation page and your own domain. Every gift goes straight to your nonprofit's account, with an automatic receipt.</p>
  ${pills('donation','Add a donation page · $59/year','No thanks',rec?'Recommended':'')}
- <p class="note">${ic('info')}<span>Donations sent to a personal account, such as Venmo, aren't tax-deductible for your donors, and they mix your nonprofit's money with yours.</span></p>
- ${wyg([['handshake','Donors give with confidence','A real page on your own .org, not a personal account.'],
-     ['receipt','Receipts sent for you','Every donor gets one automatically, ready for tax time.'],
-     ['clock','Live in minutes','We set it up. Cancel anytime.']])}`};
+ ${why("a page on your own .org shows donors you're the real thing, and receipts go out for you. Gifts sent to a personal account, such as Venmo, aren't tax-deductible.")}`};
 };
+function why(t){return `<p class="note why">${ic('info')}<span><b>Why it matters:</b> ${t}</span></p>`}
 
 V.charity=()=>{
  const fee=SD().charity.fee;
@@ -758,10 +758,7 @@ V.charity=()=>{
  <h1>Your state requires registration before you ask for donations</h1>
  <p class="body">Charities above a certain size must register with the state before they fundraise. We prepare and file it for you.</p>
  ${pills('charity',`File it for me · $99 + $${fee} state fee`,"I'll file it myself")}
- ${charityMode()==='optional'?`<p class="note">${ic('info')}<span>Required in Georgia once you raise more than $25,000 a year.</span></p>`:''}
- ${wyg([['shieldcheck','Ask for donations legally','Registered before you fundraise.'],
-     ['file','We file it for you','Forms, fees and confirmation.'],
-     ['bell','Renewals on track','We remind you before it expires.']])}`};
+ ${why(S.state==='GA'?'required in Georgia once you raise more than $25,000 a year.':'required in Florida once you raise more than $50,000 a year, or pay anyone to help you fundraise.')}`};
 };
 
 V.permits=()=>{
@@ -770,9 +767,7 @@ V.permits=()=>{
  <h1>Find out which permits your nonprofit needs</h1>
  <p class="body">Depending on what you do and where, you may need local licenses or permits. We check your city, county and state rules and send you a clear list.</p>
  ${pills('permits','Get my permits report · $39','No thanks',rec?'Recommended':'')}
- ${wyg([['listcheck','Know exactly what applies','City, county and state rules, in one list.'],
-     ['building','Ready for venues and partners','The proof they ask for before you start.'],
-     ['shieldcheck','Start without surprises','Know what you need before your first program or event.']])}`};
+ ${why("venues and partners often ask for permits before your first program or event. You'll know exactly what applies, in one list.")}`};
 };
 
 V.bookkeeping=()=>{
@@ -781,10 +776,7 @@ V.bookkeeping=()=>{
  <h1>Keep clean books for donors and the IRS</h1>
  <p class="body">We track donations, expenses and grants, and keep your books ready for your yearly IRS filing.</p>
  ${pills('bookkeeping','Add bookkeeping · $39/month','No thanks',rec?'Recommended':'')}
- ${rec?'':`<p class="note">${ic('info')}<span>Raising under $50,000 a year? A separate bank account and a simple spreadsheet are usually enough.</span></p>`}
- ${wyg([['barchart','Grant-ready books','Show funders exactly where money went.'],
-     ['receipt','IRS return, ready','Your yearly IRS numbers in one place.'],
-     ['calendar','Monthly, no lock-in','Cancel anytime.']],rec?'What you get':'What it includes')}`};
+ ${why('funders want to see where the money went, and clean books make your yearly IRS filing simple. Under $50,000 a year, a separate bank account and a spreadsheet are usually enough.')}`};
 };
 
 // Plan card lines: [text, tooltip, visible helper, neutral (not a benefit)]
