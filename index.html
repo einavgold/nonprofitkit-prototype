@@ -34,6 +34,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .logo-mark svg{width:16px;height:16px}
 .sect{font-size:14px;color:var(--muted);white-space:nowrap}
 .sect b{color:var(--text);font-weight:600}
+.sect .sl,.sect b{display:inline}
 .chat{justify-self:end;font-size:14px;font-weight:500;color:var(--primary);text-decoration:none;display:flex;align-items:center;gap:6px}
 .chat svg{width:16px;height:16px}
 .progress{display:flex;gap:6px;max-width:1120px;margin:0 auto;padding:10px max(20px,env(safe-area-inset-right,0px)) 0 max(20px,env(safe-area-inset-left,0px))}
@@ -47,6 +48,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .qicon{width:56px;height:56px;border-radius:50%;background:var(--tint);color:var(--primary);display:grid;place-items:center;margin:8px auto 16px}
 .qicon svg{width:26px;height:26px}
 h1{font-family:var(--display);font-weight:500;font-size:32px;line-height:1.18;letter-spacing:-.015em;text-align:center;margin:0 0 10px;text-wrap:balance}
+h2.q2,.warn{scroll-margin-top:84px}
 h2.q2{font-family:var(--display);font-weight:500;font-size:24px;line-height:1.25;text-align:center;margin:36px 0 16px;text-wrap:balance}
 .lede{text-align:center;color:var(--muted);margin:0 auto 24px;max-width:52ch}
 .help{font-size:14px;color:var(--muted);margin:6px 0 0}
@@ -293,7 +295,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 .ans-chips{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px}
 .achip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:500}
 .achip svg{width:14px;height:14px;color:var(--primary);flex:none}
-.ans-edit{font-size:13px}
+.ans-edit{font-size:13px;cursor:default}
 .ans.sm{margin:0 0 20px}
 .ans.sm .achip{font-size:12px;padding:3px 9px;gap:5px}
 .ans.sm .achip svg{width:12px;height:12px}
@@ -324,7 +326,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 .cmp .pc-list{font-size:14px;margin-bottom:16px}
 .cmp .block{margin-top:auto;height:46px;font-size:15px;min-width:0}
 /* Review v2 */
-.planrow{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:14px}
+.planrow{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--tint);border:1px solid var(--tint-strong);border-radius:14px;padding:14px 18px;margin-bottom:14px}
 .pr-n{font-weight:600}
 .rcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:4px 18px;margin-bottom:14px}
 .rc-h{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:12px 0 4px}
@@ -387,6 +389,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 .btn-spin{width:20px;height:20px;border-radius:50%;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
 
 /* Demo helper */
+.demobar{display:flex;justify-content:center;padding:calc(6px + env(safe-area-inset-top,0px)) 12px 6px;background:var(--bg)}
 #demo{position:static;white-space:nowrap;max-width:100%;background:#20302A;color:#E8F0EC;border-radius:999px;padding:5px 10px;font-size:11px;display:inline-flex;align-items:center;gap:6px;border:1px dashed #6E8F82}
 #demo .tag{background:var(--accent);color:#3B2A06;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;margin-right:4px;border:0;text-decoration:none;cursor:default}
 #demo .demo-body{display:inline-flex;align-items:center;gap:6px}
@@ -405,7 +408,10 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
   .nfields{grid-template-columns:1fr;row-gap:22px}
   .nfield{grid-row:auto;grid-template-rows:auto}
   .top-in{grid-template-columns:auto 1fr auto;height:56px}
-  .sect{font-size:12px;text-align:center;white-space:normal;line-height:1.25}
+  .sect{font-size:11px;text-align:center;white-space:nowrap;line-height:1.3;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0}
+  .sect .sl,.sect b{display:block}
+  .sect .sdot{display:none}
+  .sect b{font-size:13px;overflow:hidden;text-overflow:ellipsis;max-width:100%}
   .chat span{display:none}
   .logo{font-size:18px}
   .page{padding-top:20px}
@@ -422,7 +428,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
   .wyg-card{flex-direction:row;align-items:flex-start;gap:12px}
   .card .ci{width:38px;height:38px}
   .card .ci svg{width:19px;height:19px}
-  .bar{position:sticky;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--border);margin:24px calc(-1 * max(20px,env(safe-area-inset-right,0px))) 0;padding:12px max(20px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));box-shadow:0 -6px 18px rgba(27,36,32,.06)}
+  .bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--border);margin:0;padding:12px max(20px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));box-shadow:0 -6px 18px rgba(27,36,32,.06)}
   .primary{min-width:0;flex:1;max-width:260px;padding:0 20px}
   .strip{display:flex;justify-content:space-between;align-items:center;font-size:14px;background:var(--tint);border-radius:10px;padding:8px 12px;margin-bottom:10px}
   .strip b{color:var(--primary)}
@@ -448,6 +454,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
+<div class="demobar"><div id="demo" role="group" aria-label="Prototype tool"><span class="tag">Prototype tool</span><span class="demo-body">Demo: fill as <button data-act="demo" data-p="maria">Maria</button>·<button data-act="demo" data-p="james">James</button>·<button data-act="demo" data-p="leah">Leah</button></span></div></div>
 <header class="top"><div class="top-in">
   <button class="logo" data-act="home" aria-label="NonprofitKit home"><span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span>NonprofitKit</button>
   <div class="sect" id="sect"></div>
@@ -455,7 +462,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 </div><div class="progress" id="progress"></div></header>
 
 <div class="page"><main id="main"></main><div class="bar" id="bar"></div></div>
-<footer><span>We are not a law firm or a CPA firm.</span><div id="demo" role="group" aria-label="Prototype tool"><span class="tag">Prototype tool</span><span class="demo-body">Demo: fill as <button data-act="demo" data-p="maria">Maria</button>·<button data-act="demo" data-p="james">James</button>·<button data-act="demo" data-p="leah">Leah</button></span></div></footer>
+<footer><span>We are not a law firm or a CPA firm.</span></footer>
 <div id="ovroot"></div>
 
 <script>
@@ -961,12 +968,13 @@ function renderOv(){
 }
 
 /* ---------- Render ---------- */
+function padBar(){const bar=document.getElementById('bar');document.body.style.paddingBottom=(isMobile()&&!bar.hidden)?bar.offsetHeight+'px':'';}
 let lastScreen=null;
 function render(){
  const main=document.getElementById('main'), bar=document.getElementById('bar');
  const scr=S.screen, sec=secOf(scr);
  // section label + progress
- document.getElementById('sect').innerHTML=(sec>=1&&sec<=4)?`Section ${sec}/4 · <b>${SECTIONS[sec]}</b>`:'';
+ document.getElementById('sect').innerHTML=(sec>=1&&sec<=4)?`<span class="sl">Section ${sec}/4</span><span class="sdot"> · </span><b>${SECTIONS[sec]}</b>`:'';
  const prog=document.getElementById('progress');
  if(sec===0){prog.hidden=true;}
  else{
@@ -995,6 +1003,7 @@ function render(){
    ${scr==='review'&&mob?`<p class="under">${PAY_UNDER}</p>`:''}</div>`;
  }
  bar.classList.toggle('stick',!bar.hidden&&!!v.stick);
+ padBar();
  if(lastScreen!==scr){window.scrollTo(0,0);lastScreen=scr;if(S.trail[S.trail.length-1]!==scr)S.trail.push(scr);}
  if(scr==='landing') alignTree();
  renderOv();
@@ -1037,7 +1046,12 @@ document.addEventListener('click',e=>{
   case 'start': go('basics'); break;
   case 'next': if(!t.disabled) next(); break;
   case 'back': back(); break;
-  case 'ans': S[t.dataset.key]=t.dataset.val; render(); break;
+  case 'ans': {
+   const first=S.screen==='team'&&t.dataset.key==='team'&&!S.paid;
+   S[t.dataset.key]=t.dataset.val; render();
+   if(first&&isMobile()){const q=document.querySelector('.warn')||document.querySelector('h2.q2'); if(q) setTimeout(()=>q.scrollIntoView({behavior:'smooth',block:'start'}),150);}
+   break;
+  }
   case 'pick': {
    let v=t.dataset.val; v=v==='true'?true:v==='false'?false:v;
    const was=S.screen==='c3'&&c3Answered();
@@ -1058,7 +1072,7 @@ document.addEventListener('click',e=>{
   }
   case 'ov': S.ov=t.dataset.ov; renderOv(); break;
   case 'google': S.google=!S.google; render(); break;
-  case 'editans': go('cause'); break;
+  case 'editans': break; // demo only: shown but inert
   case 'close': S.ov=null; renderOv(); break;
   case 'paynow': pay(t); break;
   case 'demo': fillPersona(t.dataset.p); break;
@@ -1097,7 +1111,7 @@ document.addEventListener('keydown',e=>{
  if(e.key==='Enter'&&e.target.matches('.input[data-in]')){const b=document.getElementById('btn-next');if(b&&!b.disabled){e.preventDefault();next();}}
 });
 let wasMobile=isMobile();
-window.addEventListener('resize',()=>{const m=isMobile(); if(m!==wasMobile){wasMobile=m; if(!S.loading) render();} if(S.screen==='landing') alignTree();});
+window.addEventListener('resize',()=>{const m=isMobile(); if(m!==wasMobile){wasMobile=m; if(!S.loading) render();} if(S.screen==='landing') alignTree(); padBar();});
 // Tree spans from the top of the headline to the bottom of the Start button
 function alignTree(){
  const t=document.querySelector('.hero-txt'), b=document.getElementById('btn-start');
