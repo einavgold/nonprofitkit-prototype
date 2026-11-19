@@ -337,6 +337,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 .rc-h+.rline{border-top:0}
 .rline.nt{grid-template-columns:minmax(0,1fr) 46px}
 .rl-n{font-weight:500;font-size:15px}
+.rl-sub{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
 .rl-note{display:block;font-size:13px;font-weight:500;color:var(--success)}
 .rl-r{display:flex;flex-direction:column;align-items:flex-end;font-variant-numeric:tabular-nums}
 .rl-p{font-weight:600;font-size:15px;white-space:nowrap}
@@ -593,7 +594,8 @@ function calc(){
  if(off==='C'&&!apply) one.push({n:'501(c)(3)',note:'Not needed yet · you save $424',a:0,on:true});
  else if(apply||S.listed.has('c3')) one.push({n:off==='B'?'501(c)(3) application (full form)':'501(c)(3) application (short form)',a:off==='B'?449:149,on:apply,key:'c3',when:'today'});
  if(val('permits')===true||S.listed.has('permits')) one.push({n:'Permits report',a:39,on:val('permits')===true,key:'permits',when:'today'});
- if(cm&&(val('charity')===true||S.listed.has('charity'))) one.push({n:'Charity registration',a:99,on:val('charity')===true,key:'charity',when:'today'});
+ if(cm){ const chOn=val('charity')===true, sub=['+ $'+sd.charity.fee+' state fee']; if(!chOn&&cm==='required') sub.push('Required before you ask for donations in '+st);
+  one.push({n:'Charity registration',sub,a:99,on:chOn,key:'charity',when:'today'}); }
  one.push({n:'Expedited state filing',a:39,on:val('expedited')===true,key:'expedited',when:'today'});
  one.push({n:"Founder's kit",a:69,on:val('kit')===true,key:'kit',when:'today'});
  if(val('donation')===true||S.listed.has('donation')) yearly.push({n:'Donation page',a:59,txt:'$59/year',on:val('donation')===true,key:'donation',when:'today'});
@@ -804,6 +806,7 @@ const PLAN_WHY={free:'Small groups like yours file a free IRS postcard. Deadline
  essentials:"Your yearly IRS filing is a free postcard, so you don't need a paid tax return. We handle the state side.",
  complete:'Groups raising over $50,000 file a real IRS return every year. We prepare and file it for you.'};
 function planList(p){
+ if(p==='complete') return PLAN_ITEMS.complete.filter(x=>x[0]!=='Renews your charity registration'||(charityMode()&&val('charity')===true));
  if(PLAN_ITEMS[p]) return PLAN_ITEMS[p];
  const agent=AGENT_LINE;
  const postcard=['Reminds you to file your free IRS postcard (990-N)','Small nonprofits file the 990-N online every year. It is free and takes about 10 minutes.'];
@@ -899,7 +902,7 @@ V.c3=()=>{
 function rlineHTML(x){
  const ctl=x.key?`<button class="tog ${x.on?'on':''}" role="switch" aria-checked="${x.on}" aria-label="${esc(x.n)}" data-act="tog" data-key="${x.key}"></button>`:(x.fixed?`<span class="fixed" title="Always included">${ic('lock')}</span>`:'<span></span>');
  const right=x.note?'':`<div class="rl-r"><span class="rl-p">${x.txt||fmt(x.a)}</span><span class="rl-w">${x.when}</span></div>`;
- return `<div class="rline ${x.on===false?'off':''} ${x.note?'nt':''}"><div class="rl-n">${x.n}${x.note?`<span class="rl-note">${x.note}</span>`:''}</div>${right}${ctl}</div>`;
+ return `<div class="rline ${x.on===false?'off':''} ${x.note?'nt':''}"><div class="rl-n">${x.n}${x.note?`<span class="rl-note">${x.note}</span>`:''}${(x.sub||[]).map(t=>`<span class="rl-sub">${t}</span>`).join('')}</div>${right}${ctl}</div>`;
 }
 const PAY_UNDER='Secure checkout · Full refund of our fees before we file';
 V.review=()=>{
