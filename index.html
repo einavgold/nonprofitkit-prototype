@@ -480,7 +480,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 </div><div class="progress" id="progress"></div></header>
 
 <div class="page"><main id="main"></main><div class="bar" id="bar"></div></div>
-<footer><span>We are not a law firm or a CPA firm.</span></footer>
+<footer id="foot"><span>We are not a law firm or a CPA firm.</span></footer>
 <div id="ovroot"></div>
 
 <script>
@@ -992,6 +992,7 @@ let lastScreen=null;
 function render(){
  const main=document.getElementById('main'), bar=document.getElementById('bar');
  const scr=S.screen, sec=secOf(scr);
+ document.getElementById('foot').hidden=(scr!=='landing'||S.loading);
  // section label + progress
  document.getElementById('sect').innerHTML=(sec>=1&&sec<=4)?`<span class="sl">Section ${sec}/4</span><span class="sdot"> · </span><b>${SECTIONS[sec]}</b>`:'';
  const prog=document.getElementById('progress');
