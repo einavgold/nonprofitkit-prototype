@@ -144,6 +144,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
 /* Landing */
 .hero2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:32px;align-items:center;margin-top:12px}
 .hero-txt{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.hero2 .hero-h1{white-space:nowrap}
 .hero2 h1{font-size:52px;text-align:left;margin:0 0 6px}
 .hero2 .lede{font-size:18px;text-align:left;margin:0 0 18px;max-width:46ch}
 .hero2 .primary{height:54px;padding:0 32px;font-size:17px}
@@ -645,7 +646,7 @@ const V={};
 V.landing=()=>({wide:true,html:`
  <section class="hero2">
   <div class="hero-txt">
-   <h1>Make your cause official.</h1>
+   <h1 class="hero-h1">Make your<br>cause official.</h1>
    <p class="lede">Forming your nonprofit is step one. We guide you through the IRS approval donors look for, step by step.</p>
    <button class="primary" data-act="start" id="btn-start">Start my nonprofit</button>
    <p class="from-line">From $99 + state fees. No hidden costs.</p>
