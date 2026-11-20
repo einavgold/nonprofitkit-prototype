@@ -633,7 +633,7 @@ function calc(){
 
 /* ---------- Components ---------- */
 const qicon=n=>`<div class="qicon">${ic(n)}</div>`;
-const privacy=()=>`<p class="privacy">🔒 This stays private and is only used to build your plan.</p>`;
+const privacy=()=>`<p class="privacy">🔒 Your answers are private and only used to tailor your plan</p>`;
 function cards(key,list){
  return `<div class="cards" role="radiogroup">${list.map(([k,l,i])=>`<button class="card ${S[key]===k?'sel':''}" role="radio" aria-checked="${S[key]===k}" data-act="ans" data-key="${key}" data-val="${k}"><span class="ci">${ic(i)}</span><span>${l}</span></button>`).join('')}</div>`;
 }
