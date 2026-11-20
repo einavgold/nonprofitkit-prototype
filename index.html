@@ -437,7 +437,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap
   #demo .demo-body{gap:3px}
   .cmp-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 calc(-1 * max(20px,env(safe-area-inset-right,0px)));padding:14px max(20px,env(safe-area-inset-right,0px)) 8px}
   .cmp{flex:0 0 82%;scroll-snap-align:center}
-  .cmp .block{flex:none;width:100%;max-width:none}
+  .cmp .block,.nextcard .primary,.modal .primary.block{flex:none;width:100%;max-width:none}
   .wyg-cards{grid-template-columns:1fr;gap:10px}
   .wyg-card{flex-direction:row;align-items:flex-start;gap:12px}
   .card .ci{width:38px;height:38px}
@@ -783,7 +783,6 @@ V.charity=()=>{
  return {ok:val('charity')!==undefined,html:`${qicon('bank')}
  <h1>Your state requires registration before you ask for donations</h1>
  <p class="body">Charities above a certain size must register with the state before they fundraise. We prepare and file it for you.</p>
- <p class="note"><span><b>Required before you ask for donations in your state.</b></span></p>
  ${pills('charity',`File it for me · $99 + $${fee} state fee`,"I'll file it myself")}
  ${why(S.state==='GA'?'required in Georgia once you raise $25,000 or more a year, or work with a paid fundraiser. Registration is valid for 24 months.':'required in Florida once you raise more than $50,000 a year, or pay anyone to help you fundraise. Below that, we file your exemption for you as part of Basics.')}`};
 };
